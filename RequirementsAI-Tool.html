@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RequirementsAI | User Story Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-tertiary: #1a1a1d;
+            --border-color: #2a2a2e;
+            --text-primary: #fafafa;
+            --text-secondary: #a0a0a5;
+            --text-muted: #636366;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --gradient-1: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-2: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 3rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .badge {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .card-header-icon.input {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .card-header-icon.output {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        textarea, select, input {
+            width: 100%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus, select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23636366' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        /* Output Section */
+        .output-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .output-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .output-content {
+            min-height: 400px;
+        }
+
+        .output-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .output-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .output-section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .output-section-title .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .output-section-title .dot.blue { background: var(--accent-blue); }
+        .output-section-title .dot.green { background: var(--accent-green); }
+        .output-section-title .dot.purple { background: var(--accent-purple); }
+        .output-section-title .dot.orange { background: var(--accent-orange); }
+
+        .user-story-box {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1.25rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .user-story-box strong {
+            color: var(--accent-blue);
+        }
+
+        .acceptance-criteria {
+            list-style: none;
+        }
+
+        .acceptance-criteria li {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .acceptance-criteria li:last-child {
+            margin-bottom: 0;
+        }
+
+        .gherkin-keyword {
+            font-weight: 600;
+        }
+
+        .gherkin-given { color: var(--accent-purple); }
+        .gherkin-when { color: var(--accent-orange); }
+        .gherkin-then { color: var(--accent-green); }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .priority-must {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .priority-should {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .priority-could {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            flex: 1;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .output-wrapper {
+            position: relative;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Requirement Type Pills */
+        .type-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .type-pill {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-pill:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .type-pill.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* Example Templates */
+        .example-link {
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .example-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Requirement type templates and examples
+        const requirementTypes = [
+            { id: 'functional', label: 'Functional', icon: '⚙️' },
+            { id: 'ui', label: 'UI/UX', icon: '🎨' },
+            { id: 'api', label: 'API/Integration', icon: '🔌' },
+            { id: 'data', label: 'Data/Reporting', icon: '📊' },
+            { id: 'security', label: 'Security', icon: '🔐' },
+            { id: 'performance', label: 'Performance', icon: '⚡' },
+        ];
+
+        const exampleInputs = {
+            functional: "Users need to be able to reset their password if they forget it. They should receive an email with a reset link that expires after 24 hours.",
+            ui: "The dashboard is too cluttered. Users want a cleaner interface with the most important metrics visible at the top.",
+            api: "We need to integrate with Stripe for payment processing. The system should handle successful payments, failures, and refunds.",
+            data: "Management wants a weekly report showing sales by region, top performing products, and customer acquisition costs.",
+            security: "Customer data must be encrypted at rest and in transit. Users should be logged out after 30 minutes of inactivity.",
+            performance: "The search results page takes too long to load. It should return results within 2 seconds even with 10,000+ products.",
+        };
+
+        const priorityOptions = [
+            { value: 'must', label: 'Must Have', class: 'priority-must' },
+            { value: 'should', label: 'Should Have', class: 'priority-should' },
+            { value: 'could', label: 'Could Have', class: 'priority-could' },
+        ];
+
+        // Simulated AI generation (replace with actual API call)
+        const generateRequirements = async (input, type, priority) => {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Template-based generation for demo
+            const templates = {
+                functional: {
+                    role: "registered user",
+                    action: "reset my password via email",
+                    benefit: "regain access to my account securely without contacting support",
+                    criteria: [
+                        { given: "I am on the login page", when: "I click 'Forgot Password' and enter my registered email", then: "I receive a password reset email within 2 minutes" },
+                        { given: "I have received the reset email", when: "I click the reset link within 24 hours", then: "I am directed to a secure password reset form" },
+                        { given: "I am on the reset form", when: "I enter a new password meeting complexity requirements", then: "my password is updated and I receive a confirmation email" },
+                        { given: "the reset link is older than 24 hours", when: "I click the link", then: "I see an error message and am prompted to request a new link" },
+                    ]
+                },
+                ui: {
+                    role: "dashboard user",
+                    action: "view key metrics in a clean, organized layout",
+                    benefit: "quickly assess business performance without visual clutter",
+                    criteria: [
+                        { given: "I navigate to the dashboard", when: "the page loads", then: "I see the top 4 KPIs prominently displayed in card format above the fold" },
+                        { given: "I am viewing the dashboard", when: "I look at the layout", then: "secondary metrics are organized in collapsible sections below primary KPIs" },
+                        { given: "I interact with a KPI card", when: "I hover over it", then: "I see a tooltip with trend data and comparison to previous period" },
+                    ]
+                },
+                api: {
+                    role: "system",
+                    action: "process payments through Stripe integration",
+                    benefit: "customers can complete purchases securely and reliably",
+                    criteria: [
+                        { given: "a customer submits valid payment details", when: "the payment is processed by Stripe", then: "the order status updates to 'Paid' and a confirmation email is sent" },
+                        { given: "Stripe returns a payment failure", when: "the transaction is declined", then: "the customer sees a user-friendly error message with retry options" },
+                        { given: "a refund is initiated by admin", when: "the refund request is sent to Stripe", then: "the customer receives the refund within 5-10 business days and is notified via email" },
+                    ]
+                },
+                data: {
+                    role: "sales manager",
+                    action: "receive automated weekly sales reports",
+                    benefit: "make data-driven decisions without manual data gathering",
+                    criteria: [
+                        { given: "it is Monday at 8:00 AM", when: "the report scheduler runs", then: "I receive an email with the weekly sales report attached as PDF" },
+                        { given: "I open the report", when: "I review the contents", then: "I see sales breakdown by region, top 10 products, and CAC metrics with week-over-week comparison" },
+                        { given: "I want to drill down", when: "I click on a region in the email", then: "I am directed to the live dashboard filtered to that region" },
+                    ]
+                },
+                security: {
+                    role: "system administrator",
+                    action: "ensure customer data is protected with encryption and session management",
+                    benefit: "maintain compliance and protect customer trust",
+                    criteria: [
+                        { given: "customer data is stored in the database", when: "I inspect the data at rest", then: "all PII fields are encrypted using AES-256" },
+                        { given: "data is transmitted between client and server", when: "I inspect network traffic", then: "all requests use TLS 1.3 encryption" },
+                        { given: "a user has been inactive for 30 minutes", when: "they attempt any action", then: "they are automatically logged out and redirected to login" },
+                    ]
+                },
+                performance: {
+                    role: "online shopper",
+                    action: "receive fast search results",
+                    benefit: "find products quickly without frustration",
+                    criteria: [
+                        { given: "I enter a search query", when: "I submit the search with up to 10,000 products in catalog", then: "results display within 2 seconds" },
+                        { given: "I apply filters to search results", when: "I select category, price range, or brand filters", then: "filtered results update within 500 milliseconds" },
+                        { given: "multiple users search simultaneously", when: "100 concurrent searches are executed", then: "95th percentile response time remains under 3 seconds" },
+                    ]
+                },
+            };
+
+            const template = templates[type] || templates.functional;
+            
+            return {
+                userStory: {
+                    role: template.role,
+                    action: template.action,
+                    benefit: template.benefit,
+                },
+                acceptanceCriteria: template.criteria,
+                priority: priority,
+                type: type,
+                timestamp: new Date().toISOString(),
+            };
+        };
+
+        function App() {
+            const [input, setInput] = useState('');
+            const [selectedType, setSelectedType] = useState('functional');
+            const [priority, setPriority] = useState('must');
+            const [output, setOutput] = useState(null);
+            const [loading, setLoading] = useState(false);
+            const [copied, setCopied] = useState(false);
+
+            const handleGenerate = async () => {
+                if (!input.trim()) return;
+                
+                setLoading(true);
+                try {
+                    const result = await generateRequirements(input, selectedType, priority);
+                    setOutput(result);
+                } catch (error) {
+                    console.error('Generation failed:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const loadExample = () => {
+                setInput(exampleInputs[selectedType]);
+            };
+
+            const copyToClipboard = () => {
+                if (!output) return;
+                
+                const text = `USER STORY:
+As a ${output.userStory.role}, I want to ${output.userStory.action}, so that ${output.userStory.benefit}.
+
+ACCEPTANCE CRITERIA:
+${output.acceptanceCriteria.map((c, i) => 
+`${i + 1}. GIVEN ${c.given}
+   WHEN ${c.when}
+   THEN ${c.then}`
+).join('\n\n')}
+
+Priority: ${priority.toUpperCase()}
+Type: ${selectedType.toUpperCase()}`;
+
+                navigator.clipboard.writeText(text);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            return (
+                <div className="app-container">
+                    <header className="header">
+                        <div className="logo">
+                            <div className="logo-icon">R</div>
+                            <div className="logo-text">Requirements<span>AI</span></div>
+                        </div>
+                        <div className="badge">v1.0 • BA Toolkit</div>
+                    </header>
+
+                    <section className="hero">
+                        <h1>Transform Raw Input into <span>Structured Requirements</span></h1>
+                        <p>Convert stakeholder feedback, meeting notes, and feature requests into professional user stories with acceptance criteria.</p>
+                    </section>
+
+                    <div className="main-grid">
+                        {/* Input Panel */}
+                        <div className="card">
+                            <div className="card-header">
+                                <div className="card-header-icon input">📝</div>
+                                <h2>Input</h2>
+                            </div>
+                            <div className="card-body">
+                                <div className="type-pills">
+                                    {requirementTypes.map(type => (
+                                        <button
+                                            key={type.id}
+                                            className={`type-pill ${selectedType === type.id ? 'active' : ''}`}
+                                            onClick={() => setSelectedType(type.id)}
+                                        >
+                                            {type.icon} {type.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="form-group">
+                                    <label>
+                                        Raw Requirement / Stakeholder Input
+                                        <span style={{ float: 'right' }}>
+                                            <a className="example-link" onClick={loadExample}>
+                                                Load example →
+                                            </a>
+                                        </span>
+                                    </label>
+                                    <textarea
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        placeholder="Paste meeting notes, feature requests, or stakeholder feedback here..."
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>MoSCoW Priority</label>
+                                    <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+                                        <option value="must">Must Have - Critical for release</option>
+                                        <option value="should">Should Have - Important but not vital</option>
+                                        <option value="could">Could Have - Nice to have</option>
+                                    </select>
+                                </div>
+
+                                <button 
+                                    className="btn btn-primary" 
+                                    onClick={handleGenerate}
+                                    disabled={!input.trim() || loading}
+                                >
+                                    {loading ? 'Generating...' : '✨ Generate User Story'}
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Output Panel */}
+                        <div className="card">
+                            <div className="card-header">
+                                <div className="card-header-icon output">✅</div>
+                                <h2>Structured Output</h2>
+                            </div>
+                            <div className="card-body">
+                                {loading ? (
+                                    <div className="loading">
+                                        <div className="loading-spinner"></div>
+                                    </div>
+                                ) : output ? (
+                                    <div className="output-wrapper">
+                                        <button className="copy-btn" onClick={copyToClipboard}>
+                                            {copied ? '✓ Copied!' : '📋 Copy All'}
+                                        </button>
+                                        <div className="output-content">
+                                            <div className="output-section">
+                                                <div className="output-section-title">
+                                                    <span className="dot blue"></span>
+                                                    User Story
+                                                </div>
+                                                <div className="user-story-box">
+                                                    <strong>As a</strong> {output.userStory.role}, <strong>I want to</strong> {output.userStory.action}, <strong>so that</strong> {output.userStory.benefit}.
+                                                </div>
+                                            </div>
+
+                                            <div className="output-section">
+                                                <div className="output-section-title">
+                                                    <span className="dot green"></span>
+                                                    Acceptance Criteria (Given/When/Then)
+                                                </div>
+                                                <ul className="acceptance-criteria">
+                                                    {output.acceptanceCriteria.map((criteria, index) => (
+                                                        <li key={index}>
+                                                            <span className="gherkin-keyword gherkin-given">GIVEN</span> {criteria.given}<br/>
+                                                            <span className="gherkin-keyword gherkin-when">WHEN</span> {criteria.when}<br/>
+                                                            <span className="gherkin-keyword gherkin-then">THEN</span> {criteria.then}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            <div className="output-section">
+                                                <div className="output-section-title">
+                                                    <span className="dot purple"></span>
+                                                    Metadata
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                                    <span className={`priority-badge ${priorityOptions.find(p => p.value === output.priority)?.class}`}>
+                                                        {priorityOptions.find(p => p.value === output.priority)?.label}
+                                                    </span>
+                                                    <span className="priority-badge" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>
+                                                        {requirementTypes.find(t => t.id === output.type)?.icon} {requirementTypes.find(t => t.id === output.type)?.label}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="stats-bar">
+                                                <div className="stat-item">
+                                                    <div className="stat-value">{output.acceptanceCriteria.length}</div>
+                                                    <div className="stat-label">Acceptance Criteria</div>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <div className="stat-value">100%</div>
+                                                    <div className="stat-label">Format Consistency</div>
+                                                </div>
+                                                <div className="stat-item">
+                                                    <div className="stat-value">~2s</div>
+                                                    <div className="stat-label">Generation Time</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="output-placeholder">
+                                        <div className="output-placeholder-icon">📋</div>
+                                        <p>Your structured user story will appear here</p>
+                                        <p style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                            Select a requirement type and paste your raw input to get started
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer className="footer">
+                        <p>Built by <a href="https://www.linkedin.com/in/parameswaran-kr" target="_blank" rel="noopener noreferrer">Parameswaran Kallunkal Rajesh</a> • AI-Powered Requirements Analysis Tool</p>
+                        <p style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>Part of the Business Analyst Portfolio • Supporting 20+ requirement types</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

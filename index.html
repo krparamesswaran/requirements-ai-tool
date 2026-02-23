@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RequirementsAI | User Story Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -198,7 +201,9 @@
             margin-bottom: 0.5rem;
         }
 
-        textarea, select, input {
+        textarea,
+        select,
+        input {
             width: 100%;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -210,7 +215,9 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        textarea:focus, select:focus, input:focus {
+        textarea:focus,
+        select:focus,
+        input:focus {
             outline: none;
             border-color: var(--accent-blue);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
@@ -328,10 +335,21 @@
             border-radius: 50%;
         }
 
-        .output-section-title .dot.blue { background: var(--accent-blue); }
-        .output-section-title .dot.green { background: var(--accent-green); }
-        .output-section-title .dot.purple { background: var(--accent-purple); }
-        .output-section-title .dot.orange { background: var(--accent-orange); }
+        .output-section-title .dot.blue {
+            background: var(--accent-blue);
+        }
+
+        .output-section-title .dot.green {
+            background: var(--accent-green);
+        }
+
+        .output-section-title .dot.purple {
+            background: var(--accent-purple);
+        }
+
+        .output-section-title .dot.orange {
+            background: var(--accent-orange);
+        }
 
         .user-story-box {
             background: var(--bg-tertiary);
@@ -367,9 +385,17 @@
             font-weight: 600;
         }
 
-        .gherkin-given { color: var(--accent-purple); }
-        .gherkin-when { color: var(--accent-orange); }
-        .gherkin-then { color: var(--accent-green); }
+        .gherkin-given {
+            color: var(--accent-purple);
+        }
+
+        .gherkin-when {
+            color: var(--accent-orange);
+        }
+
+        .gherkin-then {
+            color: var(--accent-green);
+        }
 
         .priority-badge {
             display: inline-flex;
@@ -443,7 +469,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Copy Button */
@@ -533,6 +561,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="root"></div>
 
@@ -639,7 +668,7 @@
             };
 
             const template = templates[type] || templates.functional;
-            
+
             return {
                 userStory: {
                     role: template.role,
@@ -663,7 +692,7 @@
 
             const handleGenerate = async () => {
                 if (!input.trim()) return;
-                
+
                 setLoading(true);
                 try {
                     const result = await generateRequirements(input, selectedType, priority);
@@ -681,16 +710,16 @@
 
             const copyToClipboard = () => {
                 if (!output) return;
-                
+
                 const text = `USER STORY:
 As a ${output.userStory.role}, I want to ${output.userStory.action}, so that ${output.userStory.benefit}.
 
 ACCEPTANCE CRITERIA:
-${output.acceptanceCriteria.map((c, i) => 
-`${i + 1}. GIVEN ${c.given}
+${output.acceptanceCriteria.map((c, i) =>
+                    `${i + 1}. GIVEN ${c.given}
    WHEN ${c.when}
    THEN ${c.then}`
-).join('\n\n')}
+                ).join('\n\n')}
 
 Priority: ${priority.toUpperCase()}
 Type: ${selectedType.toUpperCase()}`;
@@ -711,6 +740,21 @@ Type: ${selectedType.toUpperCase()}`;
                     </header>
 
                     <section className="hero">
+                        <div style={{
+                            background: 'rgba(245, 158, 11, 0.15)',
+                            border: '1px solid rgba(245, 158, 11, 0.3)',
+                            borderRadius: '8px',
+                            padding: '0.75rem 1.25rem',
+                            marginBottom: '1.5rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            fontSize: '0.9rem',
+                            color: '#f59e0b'
+                        }}>
+                            <span>⚠️</span>
+                            <span><strong>Demo Mode:</strong> This is a portfolio showcase with sample outputs. Live AI generation is disabled.</span>
+                        </div>
                         <h1>Transform Raw Input into <span>Structured Requirements</span></h1>
                         <p>Convert stakeholder feedback, meeting notes, and feature requests into professional user stories with acceptance criteria.</p>
                     </section>
@@ -760,8 +804,8 @@ Type: ${selectedType.toUpperCase()}`;
                                     </select>
                                 </div>
 
-                                <button 
-                                    className="btn btn-primary" 
+                                <button
+                                    className="btn btn-primary"
                                     onClick={handleGenerate}
                                     disabled={!input.trim() || loading}
                                 >
@@ -805,8 +849,8 @@ Type: ${selectedType.toUpperCase()}`;
                                                 <ul className="acceptance-criteria">
                                                     {output.acceptanceCriteria.map((criteria, index) => (
                                                         <li key={index}>
-                                                            <span className="gherkin-keyword gherkin-given">GIVEN</span> {criteria.given}<br/>
-                                                            <span className="gherkin-keyword gherkin-when">WHEN</span> {criteria.when}<br/>
+                                                            <span className="gherkin-keyword gherkin-given">GIVEN</span> {criteria.given}<br />
+                                                            <span className="gherkin-keyword gherkin-when">WHEN</span> {criteria.when}<br />
                                                             <span className="gherkin-keyword gherkin-then">THEN</span> {criteria.then}
                                                         </li>
                                                     ))}
@@ -868,4 +912,5 @@ Type: ${selectedType.toUpperCase()}`;
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
+
 </html>
